@@ -4,6 +4,21 @@
 
 `make`
 
-`make run_console`
+### 1. Console version
+Console version was writed with `ncurses` lib
 
-`make run_desktop`
+use `make run_console`
+
+
+- ![](images/menu_console.png)
+- ![](images/tetris_console.png)
+- ![](images/snake_console.png)
+
+### 2. Desktop version
+Desktop version was writed with `Qt6` lib
+
+use  `make run_desktop`
+
+- ![](images/menu_desktop.png)
+- ![](images/tetris_desktop.png)
+- ![](images/snake_desktop.png)

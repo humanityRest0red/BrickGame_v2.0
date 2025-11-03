@@ -39,11 +39,11 @@ install: $(BUILD_DIR) | $(BUILD_DIR)/$(BRICK_GAME_CONSOLE) $(BUILD_DIR)/$(BRICK_
 uninstall: 
 	rm -rf $(BUILD_DIR)/$(PROJECT)
 
-run_console: $(BUILD_DIR)/$(BRICK_GAME_CONSOLE)
-	$^
+run_console: $(BUILD_DIR) | $(BUILD_DIR)/$(BRICK_GAME_CONSOLE)
+	$(BUILD_DIR)/$(BRICK_GAME_CONSOLE)
 
-run_desktop: $(BUILD_DIR)/$(BRICK_GAME_DESKTOP)
-	$^
+run_desktop: $(BUILD_DIR) | $(BUILD_DIR)/$(BRICK_GAME_DESKTOP)
+	$(BUILD_DIR)/$(BRICK_GAME_DESKTOP)
 
 $(BUILD_DIR)/$(BRICK_GAME_CONSOLE): $(BUILD_DIR)/snake.a $(BUILD_DIR)/tetris.a $(BUILD_DIR)/curses_utils.o $(BUILD_DIR)/snake_view.o $(BUILD_DIR)/tetris_view.o $(BUILD_DIR)/main.o
 	$(CXX) $^ -o $@ $(NCURSES_FLAGS)
