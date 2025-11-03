@@ -1,9 +1,9 @@
 #include "suitecases.h"
 
-START_TEST(linesDisappeared_1) {
+START_TEST(LinesDisappeared_1) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   for (int filled_lines = 0; filled_lines <= 4; ++filled_lines) {
     for (int i = 0; i < filled_lines; ++i) {
@@ -11,18 +11,18 @@ START_TEST(linesDisappeared_1) {
         prms->info.field[HEIGHT - 1 - i][j] = true;
       }
     }
-    ck_assert_int_eq(linesDisappeared(prms->info.field), filled_lines);
+    ck_assert_int_eq(LinesDisappeared(prms->info.field), filled_lines);
   }
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-Suite* suite_linesDisappeared(void) {
-  Suite* s = suite_create("linesDisappeared");
-  TCase* tc = tcase_create("linesDisappeared");
+Suite* suite_LinesDisappeared(void) {
+  Suite* s = suite_create("LinesDisappeared");
+  TCase* tc = tcase_create("LinesDisappeared");
 
-  tcase_add_test(tc, linesDisappeared_1);
+  tcase_add_test(tc, LinesDisappeared_1);
 
   suite_add_tcase(s, tc);
   return s;

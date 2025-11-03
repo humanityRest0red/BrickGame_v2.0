@@ -1,9 +1,10 @@
 #include "suitecases.h"
 
-START_TEST(shift_to_attach_1) {
+START_TEST(MoveDown_false_1) {
+  // collide with field
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   prms->info.field[15][1] = true;
   Tetromino_t etalon;
@@ -11,22 +12,22 @@ START_TEST(shift_to_attach_1) {
     prms->tetromino.cells[i].y = etalon.cells[i].y = 14;
     prms->tetromino.cells[i].x = etalon.cells[i].x = i;
   }
-  shift(prms);
+  MoveDown(prms);
 
-  ck_assert_int_eq(prms->state, ATTACHING);
   for (int i = 0; i < CELLS_IN_TETROMINO; ++i) {
     ck_assert_int_eq(prms->tetromino.cells[i].y, etalon.cells[i].y);
     ck_assert_int_eq(prms->tetromino.cells[i].x, etalon.cells[i].x);
   }
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(shift_to_attach_2) {
+START_TEST(MoveDown_false_2) {
+  // collide with wall
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   Tetromino_t etalon;
   for (int i = 0; i < CELLS_IN_TETROMINO; ++i) {
@@ -34,21 +35,20 @@ START_TEST(shift_to_attach_2) {
     prms->tetromino.cells[i].x = etalon.cells[i].x = i;
   }
 
-  shift(prms);
+  MoveDown(prms);
 
-  ck_assert_int_eq(prms->state, ATTACHING);
   for (int i = 0; i < CELLS_IN_TETROMINO; ++i) {
     ck_assert_int_eq(prms->tetromino.cells[i].y, etalon.cells[i].y);
     ck_assert_int_eq(prms->tetromino.cells[i].x, etalon.cells[i].x);
   }
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(shift_to_move_1) {
+START_TEST(MoveDown_true_1) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   prms->info.field[15][1] = true;
   Tetromino_t etalon;
@@ -56,22 +56,21 @@ START_TEST(shift_to_move_1) {
     prms->tetromino.cells[i].y = etalon.cells[i].y = 14;
     prms->tetromino.cells[i].x = etalon.cells[i].x = i + 2;  // no 1
   }
-  shift(prms);
+  MoveDown(prms);
 
-  ck_assert_int_eq(prms->state, MOVING);
   for (int i = 0; i < CELLS_IN_TETROMINO; ++i) {
     ck_assert_int_eq(prms->tetromino.cells[i].y, etalon.cells[i].y + 1);
     ck_assert_int_eq(prms->tetromino.cells[i].x, etalon.cells[i].x);
   }
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(shift_to_move_2) {
+START_TEST(MoveDown_true_2) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   Tetromino_t etalon;
   for (int i = 0; i < 3; ++i) {
@@ -81,26 +80,25 @@ START_TEST(shift_to_move_2) {
   prms->tetromino.cells[3].y = etalon.cells[3].y = HEIGHT - 3;
   prms->tetromino.cells[3].x = etalon.cells[3].x = WIDTH - 3;
 
-  shift(prms);
+  MoveDown(prms);
 
-  ck_assert_int_eq(prms->state, MOVING);
   for (int i = 0; i < CELLS_IN_TETROMINO; ++i) {
     ck_assert_int_eq(prms->tetromino.cells[i].y, etalon.cells[i].y + 1);
     ck_assert_int_eq(prms->tetromino.cells[i].x, etalon.cells[i].x);
   }
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-Suite* suite_shift(void) {
-  Suite* s = suite_create("shift");
-  TCase* tc = tcase_create("shift");
+Suite* suite_MoveDown(void) {
+  Suite* s = suite_create("MoveDown");
+  TCase* tc = tcase_create("MoveDown");
 
-  tcase_add_test(tc, shift_to_attach_1);
-  tcase_add_test(tc, shift_to_attach_2);
+  tcase_add_test(tc, MoveDown_false_1);
+  tcase_add_test(tc, MoveDown_false_2);
 
-  tcase_add_test(tc, shift_to_move_1);
-  tcase_add_test(tc, shift_to_move_2);
+  tcase_add_test(tc, MoveDown_true_1);
+  tcase_add_test(tc, MoveDown_true_2);
 
   suite_add_tcase(s, tc);
   return s;

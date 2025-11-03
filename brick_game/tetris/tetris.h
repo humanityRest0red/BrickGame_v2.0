@@ -1,26 +1,28 @@
 /**
  * @file tetris.h
  * @author kaseltzt
- * @date 27 Apr 2024
- * @brief File containing description of functions for tetris game
+ * @date 2024-04-27
+ * @brief Declaration of functions for tetris game
  */
 
 #ifndef BRICK_GAME_TETRIS_TETRIS_H_
 #define BRICK_GAME_TETRIS_TETRIS_H_
 
-#include <stdbool.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdint.h>
+
+#include "common.h"
+
+#define TETRIS_HIGH_SCORE_FILE_NAME "./brick_game/tetris/high_score.txt"
 
 #define CELLS_IN_TETROMINO 4
 
-#define HEIGHT 20
-#define WIDTH 10
-
-#define TETROMINO_HEIGHT 2
-#define TETROMINO_WIDTH 4
-
-#define HIGH_SCORE_FILE "high_score.txt"
-
 typedef enum { I = 0, J, L, O, S, T, Z } TetroName_t;
+
+typedef int8_t Coord_t;
 
 /**
  * @brief Cell structure
@@ -28,8 +30,8 @@ typedef enum { I = 0, J, L, O, S, T, Z } TetroName_t;
  * Cell structure with params x, y
  */
 typedef struct {
-  int x;
-  int y;
+  Coord_t x;
+  Coord_t y;
 } Cell_t;
 
 /**
@@ -44,60 +46,6 @@ typedef struct {
 } Tetromino_t;
 
 /**
- * @brief States for fsm
- *
- * Game states, used as states (rows) for finite state
- * machine table
- */
-typedef enum {
-  START = 0,
-  GAMEOVER,
-  SPAWN,
-  MOVING,
-  SHIFTING,
-  ATTACHING,
-} GameState_t;
-
-/**
- * @brief Signals for fsm
- *
- * User input, used as signals (columns) for finite state machine table
- */
-typedef enum {
-  Start = 0,
-  Pause,
-  Terminate,
-  Left,
-  Right,
-  Up,
-  Down,
-  Action
-} UserAction_t;
-
-/**
- * @brief Game data struct
- *
- * Game logic data
- *
- * @param field Game field
- * @param next Next spawn figure for preview
- * @param score Game score
- * @param high_score Game high score from file
- * @param level Gamel level, min 1, max 10
- * @param speed Game speed, min 1, max 10
- * @param pause Pause flag
- */
-typedef struct {
-  int **field;
-  int **next;
-  int score;
-  int high_score;
-  int level;
-  int speed;
-  int pause;
-} GameInfo_t;
-
-/**
  * @brief Game parameters struct
  *
  * Structure with all game parametres
@@ -105,10 +53,19 @@ typedef struct {
 typedef struct {
   GameInfo_t info;
   Tetromino_t tetromino;
-  GameState_t state;
 } GameParams_t;
 
 typedef void (*ActionT)(GameParams_t *prms);
+
+/**
+ * @brief Change game state depending on user input
+ *
+ * Change game state depending on user input using FSM
+ *
+ * @param action Action type value
+ * @param hold Bool value of was key hold
+ */
+void userInput(UserAction_t action, bool hold);
 
 /**
  * @brief Update current game state
@@ -128,7 +85,7 @@ GameInfo_t updateCurrentState();
  *
  * @return Pointer to GameParams_t struct
  */
-GameParams_t *updateParams(GameParams_t *prms);
+GameParams_t *UpdateParams(GameParams_t *prms);
 
 /**
  * @brief Initialize game parameters
@@ -137,7 +94,7 @@ GameParams_t *updateParams(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void initializeParams(GameParams_t *prms);
+void InitializeParams(GameParams_t *prms);
 
 /**
  * @brief Start game
@@ -146,7 +103,7 @@ void initializeParams(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void startGame(GameParams_t *prms);
+void StartGame(GameParams_t *prms);
 
 /**
  * @brief Pause game
@@ -155,7 +112,7 @@ void startGame(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void pauseGame(GameParams_t *prms);
+void PauseGame(GameParams_t *prms);
 
 /**
  * @brief Terminate game
@@ -164,7 +121,7 @@ void pauseGame(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void terminateGame(GameParams_t *prms);
+void TerminateGame(GameParams_t *prms);
 
 /**
  * @brief Spawn new figure
@@ -173,7 +130,7 @@ void terminateGame(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void spawn(GameParams_t *prms);
+void Spawn(GameParams_t *prms);
 
 /**
  * @brief Move figure down
@@ -182,7 +139,7 @@ void spawn(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void moveDown(GameParams_t *prms);
+void MoveDown(GameParams_t *prms);
 
 /**
  * @brief Move figure right
@@ -191,7 +148,7 @@ void moveDown(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void moveRight(GameParams_t *prms);
+void MoveRight(GameParams_t *prms);
 
 /**
  * @brief Move figure left
@@ -200,7 +157,7 @@ void moveRight(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void moveLeft(GameParams_t *prms);
+void MoveLeft(GameParams_t *prms);
 
 /**
  * @brief Attach figure to board cells
@@ -209,16 +166,7 @@ void moveLeft(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void attach(GameParams_t *prms);
-
-/**
- * @brief Shift figure down
- *
- * Shift figure down
- *
- * @param prms Pointer to GameParams_t struct
- */
-void shift(GameParams_t *prms);
+void Attach(GameParams_t *prms);
 
 /**
  * @brief Rotate figure
@@ -227,7 +175,7 @@ void shift(GameParams_t *prms);
  *
  * @param prms Pointer to GameParams_t struct
  */
-void rotate(GameParams_t *prms);
+void Rotate(GameParams_t *prms);
 
 /**
  * @brief Check are collided field and figure
@@ -238,7 +186,7 @@ void rotate(GameParams_t *prms);
  *
  * @return  True or false
  */
-bool isCollide(GameParams_t *prms);
+bool IsCollide(GameParams_t *prms);
 
 /**
  * @brief Check is attach
@@ -249,7 +197,7 @@ bool isCollide(GameParams_t *prms);
  *
  * @return  True or false
  */
-bool isAttach(GameParams_t *prms);
+bool IsAttach(GameParams_t *prms);
 
 /**
  * @brief Remove lines
@@ -260,57 +208,21 @@ bool isAttach(GameParams_t *prms);
  *
  * @return Removed lines count
  */
-int linesDisappeared(int **field);
+Coord_t LinesDisappeared(int **field);
 
 /**
  * @brief Check can cpawn
  *
  * Check is free space for next figure
  *
- * @param prms Pointer to GameParams_t struct
+ * @param info Pointer to GameInfo_t struct
  *
  * @return True of false
  */
-bool canSpawn(GameParams_t *prms);
+bool CanSpawn(const GameInfo_t *info);
 
-/**
- * @brief Allocate matrix
- *
- * Allocate memory array of pointers, then memory for each pointer
- *
- * @param n Rows count
- * @param m Columns count
- *
- * @return Pointer to matrix
- */
-int **newArray2D(int n, int m);
-
-/**
- * @brief Free matrix
- *
- * Free pointers, then free pointer to array of pointers
- *
- * @param this Matrix
- * @param n Rows count
- */
-void deleteArray2D(int **this, int n);
-
-/**
- * @brief Read high score
- *
- * Read number from defined file
- *
- * @return Read number
- */
-int readHighScore(void);
-
-/**
- * @brief Write high score
- *
- * Write number in defined file
- *
- * @param high_score New high score
- */
-void writeHighScore(int high_score);
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // BRICK_GAME_TETRIS_TETRIS_H_

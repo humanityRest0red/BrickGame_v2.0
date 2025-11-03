@@ -18,11 +18,11 @@ void run_testcase(Suite *testcase) {
 
 void run_tests(void) {
   Suite *list_cases[] = {
-      suite_moveDown(),  suite_moveRight(),   suite_moveLeft(),
-      suite_shift(),     suite_rotate(),
+      suite_MoveDown(),  suite_MoveRight(),   suite_MoveLeft(),
+      suite_Shift(),     suite_Rotate(),
 
-      suite_isCollide(), suite_isAttach(),    suite_linesDisappeared(),
-      suite_canSpawn(),  suite_minor_tests(), NULL};
+      suite_IsCollide(), suite_IsAttach(),    suite_LinesDisappeared(),
+      suite_CanSpawn(),  suite_minor_tests(), NULL};
 
   for (Suite **current_testcase = list_cases; *current_testcase != NULL;
        current_testcase++) {

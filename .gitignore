@@ -1,0 +1,8 @@
+.DS_Store
+
+./build/*
+./report
+./doxygen
+
+*.o
+*.a

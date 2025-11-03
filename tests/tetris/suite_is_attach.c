@@ -1,9 +1,9 @@
 #include "suitecases.h"
 
-START_TEST(isAttach_true_1) {
+START_TEST(IsAttach_true_1) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   prms->info.field[15][0] = 1;
 
@@ -11,34 +11,34 @@ START_TEST(isAttach_true_1) {
     prms->tetromino.cells[i].y = 14;
     prms->tetromino.cells[i].x = i;
   }
-  ck_assert_int_eq(isAttach(prms), true);
+  ck_assert_int_eq(IsAttach(prms), true);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(isAttach_false_1) {
+START_TEST(IsAttach_false_1) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   prms->info.field[15][0] = 1;
   for (int i = 0; i < CELLS_IN_TETROMINO; ++i) {
     prms->tetromino.cells[i].y = 14;
     prms->tetromino.cells[i].x = i + 1;
   }
-  ck_assert_int_eq(isAttach(prms), false);
+  ck_assert_int_eq(IsAttach(prms), false);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-Suite* suite_isAttach(void) {
-  Suite* s = suite_create("isAttach");
-  TCase* tc = tcase_create("isAttach");
+Suite* suite_IsAttach(void) {
+  Suite* s = suite_create("IsAttach");
+  TCase* tc = tcase_create("IsAttach");
 
-  tcase_add_test(tc, isAttach_true_1);
-  tcase_add_test(tc, isAttach_false_1);
+  tcase_add_test(tc, IsAttach_true_1);
+  tcase_add_test(tc, IsAttach_false_1);
 
   suite_add_tcase(s, tc);
   return s;

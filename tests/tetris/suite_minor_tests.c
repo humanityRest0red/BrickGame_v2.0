@@ -1,9 +1,9 @@
 #include "suitecases.h"
 
-START_TEST(test_initializePrms) {
+START_TEST(test_InitializePrms) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   ck_assert_int_eq(prms->info.pause, false);
   ck_assert_ptr_nonnull(prms->info.field);
@@ -13,73 +13,74 @@ START_TEST(test_initializePrms) {
   ck_assert_int_eq(prms->info.score, 0);
   ck_assert_int_eq(prms->state, START);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(test_startGame) {
+START_TEST(test_StartGame) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
-  startGame(prms);
+  StartGame(prms);
   ck_assert_int_eq(prms->state, SPAWN);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(test_pauseGame) {
+START_TEST(test_PauseGame) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   ck_assert_int_eq(prms->info.pause, false);
-  pauseGame(prms);
+  PauseGame(prms);
   ck_assert_int_eq(prms->info.pause, true);
-  pauseGame(prms);
+  PauseGame(prms);
   ck_assert_int_eq(prms->info.pause, false);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(test_spawn) {
+START_TEST(test_Spawn) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
-  spawn(prms);
+  Spawn(prms);
   ck_assert_int_eq(prms->state, MOVING);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-START_TEST(test_write_high_score) {
+START_TEST(test_WriteHighScore) {
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
-  int old_high_score = readHighScore();
+  int old_high_score = ReadHighScore(TETRIS_HIGH_SCORE_FILE_NAME);
   prms->info.score = old_high_score + 100;
-  attach(prms);
-  ck_assert_int_eq(prms->info.score, readHighScore());
-  writeHighScore(old_high_score);
+  Attach(prms);
+  ck_assert_int_eq(prms->info.score,
+                   ReadHighScore(TETRIS_HIGH_SCORE_FILE_NAME));
+  WriteHighScore(TETRIS_HIGH_SCORE_FILE_NAME, old_high_score);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-Suite* suite_minor_tests(void) {
+Suite* suite_minor_tests() {
   Suite* s = suite_create("minor_tests");
   TCase* tc = tcase_create("minor_tests");
 
-  tcase_add_test(tc, test_initializePrms);
-  tcase_add_test(tc, test_startGame);
-  tcase_add_test(tc, test_pauseGame);
-  tcase_add_test(tc, test_spawn);
-  tcase_add_test(tc, test_write_high_score);
+  tcase_add_test(tc, test_InitializePrms);
+  tcase_add_test(tc, test_StartGame);
+  tcase_add_test(tc, test_PauseGame);
+  tcase_add_test(tc, test_Spawn);
+  tcase_add_test(tc, test_WriteHighScore);
 
   suite_add_tcase(s, tc);
   return s;

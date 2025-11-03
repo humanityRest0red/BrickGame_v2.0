@@ -4,19 +4,19 @@ START_TEST(isCollide_true_1) {
   // with field
   GameParams_t params;
   GameParams_t* prms = &params;
-  initializeParams(prms);
+  InitializeParams(prms);
 
   prms->info.field[15][0] = 1;
 
   prms->tetromino.cells[0].y = 15;
   prms->tetromino.cells[0].x = 0;
-  ck_assert_int_eq(isCollide(prms), true);
+  ck_assert_int_eq(IsCollide(prms), true);
 
-  terminateGame(prms);
+  TerminateGame(prms);
 }
 END_TEST
 
-Suite* suite_isCollide(void) {
+Suite* suite_IsCollide() {
   Suite* s = suite_create("isCollide");
   TCase* tc = tcase_create("isCollide");
 
